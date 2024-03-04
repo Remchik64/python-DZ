@@ -1,27 +1,19 @@
-#можно преобразовать столбец в one-hot вид без использования get_dummies. 
-#Воспользуемся методом pd.get_dummies и выполним необходимые шаги:
+import random
 
-import pandas as pd
-
-# Ваш код для создания DataFrame
-random.seed(42)
+# Генерация случайных данных
 lst = ['robot'] * 10
 lst += ['human'] * 10
 random.shuffle(lst)
-data = pd.DataFrame({'whoAmI': lst})
-data.head()
 
-#Теперь, чтобы преобразовать столбец 'whoAmI' в one-hot кодировку
+# Создание словаря с уникальными значениями
+unique_values = set(lst)
 
-# Преобразование в one-hot кодировку
-one_hot_encoded = pd.get_dummies(data['whoAmI'], prefix='whoAmI')
+# Преобразование данных в one hot формат
+one_hot_encoded = []
+for value in lst:
+    encoded_value = [1 if value == unique_value else 0 for unique_value in unique_values]
+    one_hot_encoded.append(encoded_value)
 
-# Склеим исходные данные с новыми столбцами one-hot
-data_one_hot = pd.concat([data, one_hot_encoded], axis=1)
-
-# Удалим исходный столбец 'whoAmI'
-data_one_hot = data_one_hot.drop('whoAmI', axis=1)
-
-data_one_hot.head()
-
-#В результате data_one_hot будет содержать столбцы one-hot кодировки для столбца 'whoAmI'.
+# Отображение результатов
+for i in range(len(one_hot_encoded)):
+    print(one_hot_encoded[i])
